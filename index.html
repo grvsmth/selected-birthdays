@@ -7,8 +7,8 @@
 <link rel="stylesheet" href="css/site.min.css">
 <script src="https://apis.google.com/js/client.js"></script>
 <title>See the birthdays you want to see</title>
-<meta name="keywords">Google+, Google Calendar, API, Javascript, Google API, birthdays</meta>
-<meta name="description">Select only the birthdays you want to see in Google Calendar</meta>
+<meta name="keywords" content="Google+, Google Calendar, API, Javascript, Google API, birthdays"></meta>
+<meta name="description" content="Select only the birthdays you want to see in Google Calendar"></meta>
 </head>
 <body>
 <div class="container documents">
@@ -24,6 +24,10 @@
 	<div class="container" id="output"></div>
 	<div id="alertDiv"></div>
     <div id="calNameDiv" style="visibility:hidden;">
+      <div id="allButtons" class="btn-group">
+        <button type="button" class="btn btn-primary" id="checkAll">Check all</button>
+        <button type="button" class="btn btn-default" id="uncheckAll">Uncheck all</button>
+      </div>
 	  <p><label for="calNameInput">New calendar:</label>
       <input class="form-control" type="text" id="calNameInput" name="calName" value="Selected Birthdays"></input>
       <button type="button" class="btn btn-primary" id="createButton">Create</button>
@@ -33,7 +37,7 @@
   </div>
 </div>
 <div class="site-footer"><div class="container">
-	<p>Created by <a href="http://grieve-smith.com/" target="_blank">Angus B. Grieve-Smith</a> using the APIs for <a href="https://developers.google.com/+/web/" target="_blank">Google+</a> and <a href="https://developers.google.com/google-apps/calendar/" target="_blank">Google Calendar</a>, with <a href="http://momentjs.com/" target="_blank">moment.js</a> for date and time handling and <a href="http://bootflat.github.io/" target="_blank">bootflat</a> for design.  If you like this app, you can <a href="https://github.com/grvsmth/selected-birthdays" target="_blank">fork the source on GitHub</a></p>
+	<p>Created by <a href="http://grieve-smith.com/" target="_blank">Angus B. Grieve-Smith</a> using the APIs for <a href="https://developers.google.com/+/web/" target="_blank">Google+</a> and <a href="https://developers.google.com/google-apps/calendar/" target="_blank">Google Calendar</a>, with <a href="http://momentjs.com/" target="_blank">moment.js</a> for date and time handling and <a href="http://bootflat.github.io/" target="_blank">bootflat</a> for design.  If you like this app, you can <a href="https://github.com/grvsmth/selected-birthdays" target="_blank">fork the source on GitHub</a>.</p>
 	<p>This app does not change any existing calendars; it only creates a new one and optionally hides the default Birthdays calendar. All these changes can be undone in <a href="https://calendar.google.com/calendar/render#settings-calendars_9" target="_blank">your calendar settings</a>.  The app also does not reveal your contact or calendar information to anyone but you and Google.</p>
 </div></div>
 <script>
@@ -116,7 +120,7 @@ var addBirthdays = function (calID) {
 				'useDefault': false,
 				'overrides': [
 				]
-			// This gadget doesn't look as nice as 
+			// This gadget doesn't look as nice as the name by itself
 				/*
 			},
 			'gadget': {
@@ -174,6 +178,7 @@ var createCal = function () {
 		}
 	}
 	if (false == calExists) {
+alertDiv.className = "";
 		document.getElementById("calNameDiv").innerHTML = "Creating calendar...";
 		calRequest = gapi.client.calendar.calendars.insert({
 			'resource': { 
@@ -194,6 +199,13 @@ var createCal = function () {
 	}
 
 }	
+
+function checkall(value) {
+  for (var i = 0; i < ppllist.length; i++) {
+    document.getElementById("check_" + ppllist[i]).checked = value;
+  }
+
+}
 
 
 function formatDay(date) {
@@ -269,7 +281,7 @@ function showPeople() {
 	};
 	var batch = gapi.client.newBatch();
 	for (var i=0; i< peopler.items.length; i++) {
-		// Contacts without URLs are not available through the Google+ API
+		// Contacts without URLs are personal contacts, not available through the Google+ API
 		var purl = peopler.items[i].url;
 		if (typeof purl != 'undefined' && purl.length > 0 ) {
 			var sr = searchRequest(peopler.items[i].id);
@@ -294,6 +306,8 @@ function showPeople() {
 		} else {
 			resultDiv.innerHTML = "<p>Out of " + peopler.totalItems + " contacts, " + numbirthdays + " have shared their birthdays with you.  Which ones do you want in your new calendar?</p>";
 		}
+    document.getElementById("checkAll").addEventListener("click", function() { checkall(true); });
+    document.getElementById("uncheckAll").addEventListener("click", function() { checkall(false); });
 		document.getElementById("calNameDiv").style.visibility='';
 		createButton.addEventListener("click", createCal);
 		birthdayForm.addEventListener("submit", function(e) {
