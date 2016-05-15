@@ -12,34 +12,49 @@
 </head>
 <body>
 <div class="container documents">
-  <h2>See the birthdays you want to see!</h2>
-  <p>By <a href="http://grieve-smith.com/" target="_blank">Angus B. Grieve-Smith</a>.</p>
-  <div id="welcomeblock"><img id="myImage" src="blank28x28.png" /><span id="welcome"></span></div>
-  <div id="results" class="container">
-	<p>Google Calendar automatically creates a "Birthdays" calendar with the birthdays of all your contacts and the people you follow on Google+.  But what if you only want to know about some of their birthdays?  Now you can create your own calendar showing only the birthdays you want to see from your contacts list.  Click the button below to authorize this app to read your contacts and change your calendars:</p>
-	<button class="btn btn-primary" id="authorizeButton" type="button">Authorize</button>
-  </div>
-  <div class="col-md-6">
-  <form id="birthdayForm" method="POST">
-	<div class="container" id="output"></div>
-	<div id="alertDiv"></div>
-    <div id="calNameDiv" style="visibility:hidden;">
-      <div id="allButtons" class="btn-group">
-        <button type="button" class="btn btn-primary" id="checkAll">Check all</button>
-        <button type="button" class="btn btn-default" id="uncheckAll">Uncheck all</button>
-      </div>
-	  <p><label for="calNameInput">New calendar:</label>
-      <input class="form-control" type="text" id="calNameInput" name="calName" value="Selected Birthdays"></input>
-      <button type="button" class="btn btn-primary" id="createButton">Create</button>
-	  </p>
+  <div class="col-md-8">
+	<h2>See the birthdays you want to see!</h2>
+	<h4>in total privacy*</h4>
+	<p>By <a href="http://grieve-smith.com/" target="_blank">Angus B. Grieve-Smith</a>.</p>
+	<div id="welcomeblock" class="">
+		<img id="myImage" src="slimcake2.png" /><span id="welcome"></span>
+		<div class="blank"></div>
+	</div>
+	<div id="results">
+		<p>Google Calendar automatically creates a "Birthdays" calendar with the birthdays of all your contacts and the people you follow on Google+.  But what if you only want to know about some of their birthdays?  Now you can create your own calendar showing only the birthdays you want to see from your contacts list.  Click the button below to authorize this app to read your contacts and change your calendars:</p>
+		<button class="btn btn-primary" id="authorizeButton" type="button">Authorize</button>
+	</div>
+	<form id="birthdayForm" method="POST">
+		<div id="output" class="row"></div>
+		<div class="blank"></div>
+		<div id="alertDiv" class="row" style="visibility:hidden;"></div>&nbsp;
+		<div class="blank"></div>
+		<div id="calNameDiv" style="visibility:hidden;" class="col-md-9">
+			<div id="buttonRow" class="row">
+				<div id="allButtons" class="btn-group">
+					<button type="button" class="btn btn-primary" id="checkAll">Check all</button>
+					<button type="button" class="btn btn-default" id="uncheckAll">Uncheck all</button>
+				</div>
+			</div>&nbsp;
+			<div class="blank"></div>
+			<div class="input-group row">
+					<label class="control-label" for="calNameInput">New calendar:</label>
+					<input class="form-control" type="text" id="calNameInput" name="calName" value="Selected Birthdays"></input>
+			</div>
+			<div class="row">
+				<button type="button" class="btn btn-primary" id="createButton">Create</button>
+			</div>
+		</div>
     </div>
   </form>
   </div>
 </div>
 <div class="site-footer"><div class="container">
-	<p>Created by <a href="http://grieve-smith.com/" target="_blank">Angus B. Grieve-Smith</a> using the APIs for <a href="https://developers.google.com/+/web/" target="_blank">Google+</a> and <a href="https://developers.google.com/google-apps/calendar/" target="_blank">Google Calendar</a>, with <a href="http://momentjs.com/" target="_blank">moment.js</a> for date and time handling and <a href="http://bootflat.github.io/" target="_blank">bootflat</a> for design.  If you like this app, you can <a href="https://github.com/grvsmth/selected-birthdays" target="_blank">fork the source on GitHub</a>.</p>
-	<p>This app does not change any existing calendars; it only creates a new one and optionally hides the default Birthdays calendar. All these changes can be undone in <a href="https://calendar.google.com/calendar/render#settings-calendars_9" target="_blank">your calendar settings</a>.  The app also does not reveal your contact or calendar information to anyone but you and Google.</p>
-</div></div>
+	<div class="col-md-9">
+		<p>Created by <a href="http://grieve-smith.com/" target="_blank">Angus B. Grieve-Smith</a> using the APIs for <a href="https://developers.google.com/+/web/" target="_blank">Google+</a> and <a href="https://developers.google.com/google-apps/calendar/" target="_blank">Google Calendar</a>, with <a href="http://momentjs.com/" target="_blank">moment.js</a> for date and time handling and <a href="http://bootflat.github.io/" target="_blank">bootflat</a> for design.  If you like this app, you can <a href="https://github.com/grvsmth/selected-birthdays" target="_blank">fork the source on GitHub</a>.</p>
+		<p>* This app does not change any existing calendars; it only creates a new one and optionally hides the default Birthdays calendar. All these changes can be undone in <a href="https://calendar.google.com/calendar/render#settings-calendars_9" target="_blank">your calendar settings</a>.  The app also does not reveal your contact or calendar information to anyone but you and Google.</p>
+	</div>
+</div>
 <script>
 var clientId = '870664319069-pbqvuml5skla8ajshcabvr7l0m8da78s.apps.googleusercontent.com';
 
@@ -99,7 +114,10 @@ var addBirthdays = function (calID) {
 	var batch1 = gapi.client.newBatch();
 	var addReq = function(pe) {
 		// For some reason moment adds a day when you put in the year
+		// todo specify input format
+		
 		var startTime = moment(pe.birthday).year(moment().year()).subtract(1, 'days');
+		
 		var endDT = startTime.add(1,'days').format('Y-MM-DD');
 		var event = {
 			'summary': pe.displayName + "'s birthday",
@@ -149,12 +167,14 @@ var addBirthdays = function (calID) {
 		}
 	}
 	batch1.then (function(resp) {
-		document.getElementById("calNameDiv").innerHTML = '<p>Calendar created! Now would you like to hide your default Birthdays calendar, or just <a href="https://calendar.google.com/calendar/render" target="_blank">see all your calendars</a>?</p>\
+		document.getElementById("calNameDiv").innerHTML = '<div>Calendar created! Now would you like to hide your default Birthdays calendar, or just <a href="https://calendar.google.com/calendar/render" target="_blank">see all your calendars</a>?</div>\
 		<button type="button" class="btn btn-warning" id="hideButton">Hide it</button>';
 		document.getElementById("hideButton").addEventListener("click", hideDefault);
 		}, function (reason) {
 		console.error(reason);
 		alertDiv.innerHTML = "<p>Unable to run batch event insert: " + reason + "!</p>";
+		alertDiv.className = "alert alert-danger";
+		alertDiv.style.visibility='';
 	});
 	for (var i = 0; i < calreqs.length; i++) {
 	    calreqs[i].then( function (resp) {
@@ -174,12 +194,14 @@ var createCal = function () {
 		if (calr.items[i].summary.trim() === calName) {
 			alertDiv.innerHTML = "<p>A calendar with that name already exists.  Please choose another name!</p>";
 			alertDiv.className = "alert alert-danger";
+			alertDiv.style.visibility='';
 			calExists = true;
 		}
 	}
 	if (false == calExists) {
-alertDiv.className = "";
-		document.getElementById("calNameDiv").innerHTML = "Creating calendar...";
+		alertDiv.className = "";
+		alertDiv.style.visibility='hidden';
+		document.getElementById("calNameDiv").innerHTML = "<div>Creating calendar...</div>";
 		calRequest = gapi.client.calendar.calendars.insert({
 			'resource': { 
 				'summary': calName,
@@ -291,23 +313,25 @@ function showPeople() {
 	}
 	batch.then( function (resp) {
 		var otherErrors = peopleErrors - code403;
-		errorHTML = "<p>Out of " + peopler.totalItems + " contacts, " + numbirthdays + " have shared their birthdays with you.  ";
+		var summaryHTML = "<p>Out of " + peopler.totalItems + " contacts, " + numbirthdays + " have shared their birthdays with you.  ";
+		var errorHTML = "";
 		// possible future rate limit code:
 		// http://stackoverflow.com/questions/14819847/exception-quota-error-user-rate-limit-exceeded
 		
 		if (code403 > 0) {
-			errorHTML += "Google's Calendar API currently only allows you to make 500 requests per 100 seconds.  It refused to provide information for " + code403 + " of your contacts.  Please try reloading the page in a few minutes.  ";
+			errorHTML = summaryHTML + "Google's Calendar API currently only allows you to make 500 requests per 100 seconds.  It refused to provide information for " + code403 + " of your contacts.  Please try reloading the page in a few minutes.  ";
 		}
 		if (otherErrors > 0) {
-			errorHTML += "There were miscellaneous errors retrieving information for " + otherErrors + " contacts.  ";
+			errorHTML = summaryHTML + "There were miscellaneous errors retrieving information for " + otherErrors + " contacts.  ";
 		}
 		if (errorHTML.length > 0) {
 			resultDiv.innerHTML = errorHTML + "Would you still like to add these to your new calendar?</p>";
 		} else {
-			resultDiv.innerHTML = "<p>Out of " + peopler.totalItems + " contacts, " + numbirthdays + " have shared their birthdays with you.  Which ones do you want in your new calendar?</p>";
+			resultDiv.innerHTML = summaryHTML + "  Which ones do you want in your new calendar?</p>";
 		}
-    document.getElementById("checkAll").addEventListener("click", function() { checkall(true); });
-    document.getElementById("uncheckAll").addEventListener("click", function() { checkall(false); });
+		document.getElementById("checkAll").addEventListener(	"click", function() { checkall(true); });
+		document.getElementById("checkAll").addEventListener(	"click", function() { checkall(true); });
+		document.getElementById("uncheckAll").addEventListener("click", function() { checkall(false); });
 		document.getElementById("calNameDiv").style.visibility='';
 		createButton.addEventListener("click", createCal);
 		birthdayForm.addEventListener("submit", function(e) {
