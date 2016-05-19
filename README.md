@@ -1,5 +1,5 @@
 # Selected Birthdays
-Google Calendar automatically creates a "Birthdays" calendar with the birthdays of all your contacts and the people you follow on Google+. But what if you only want to know about some of their birthdays? Now you can create your own calendar showing only the birthdays you want to see from your contacts list.
+Google Calendar automatically creates a "Birthdays" calendar with the birthdays of all your contacts and the people you follow on Google+. But what if you only want to know about some of their birthdays? Now you can create your own calendar showing only the birthdays you want to see from your contacts list.  This app is currently running at http://grieve-smith.com/selectedbirthdays/
 
 Created by [Angus B. Grieve-Smith](http://grieve-smith.com/) using the APIs for [Google+](https://developers.google.com/+/web/) and [Google Calendar](https://developers.google.com/google-apps/calendar/), with [moment.js](http://momentjs.com/) for date and time handling and bootflat for design.
 
